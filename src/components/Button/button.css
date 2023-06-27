@@ -1,0 +1,17 @@
+.btn {
+    color: #cf3364;
+    font-size: 14px;
+    border: 1px solid #cf3364;
+    font-weight: 600;
+    background: #fff;
+  }
+  .btn:hover {
+    color: #fff;
+    background: #cf3364;
+  }
+  .btn-click{
+   padding: 7px 10px;
+  }
+  .btn-header{
+    border-radius: 7px;
+  }

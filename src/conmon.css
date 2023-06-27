@@ -37,8 +37,6 @@ body {
 }
 
 .btn {
-  border-radius: 10px;
-  border: none;
   cursor: pointer;
 }
 
@@ -69,14 +67,45 @@ main {
 }
 
 .title-item {
-  font-size: 1.1rem;
-  padding: 1.5rem 0 1.5rem;
+  font-size: 1.2rem;
   font-family: "Montserrat-Black";
   color: #cf3364;
-  max-width: 80%;
+  max-width: 214px;
 }
 
 .price {
   font-size: 1.2rem;
   font-family: "Montserrat-Black";
+  margin: 30px 0;
+  color: #000;
+}
+.btn_cart.btn-add{
+  background: #fff;
+  color: #cf3364;
+  border: 1px solid #cf3364;
+  margin-right: 10px;
+}
+.btn_cart{
+  color: #fff;
+  background-color:#cf3364 ;
+  padding: 20px;
+  margin-top: 40px;
+  border:none;
+  cursor: pointer;
+}
+.handle{
+  padding: 7px 11px;
+  border: 1px solid #f8d0d3;
+  background-color: #fff;
+}
+.text-content{
+  color: #cf3364;
+}
+.fa-circle-check{
+  color: #cf3364;
+  font-size: 1rem;
+  margin-right: 20px;
+}
+.flex-wrap{
+  flex-wrap: wrap;
 }

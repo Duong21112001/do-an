@@ -1,21 +1,21 @@
 import React from "react";
+import { Link } from "react-router-dom";
 const ProductItem = (props) => {
   const {
     dataProduct: { imgProduct, titleItem, titlePrice ,id},
   } = props;
-  console.log(imgProduct);
   return (
-    <div>
+   
       <div className="product-item">
-        <a className="link-product-item" href={`/chitietsanpham?${id}`}>
+        <Link  className="link-product-item" to={`/DetailProduct/${id}`}>
           <img className="img-product" src={imgProduct} alt="" />
           <div className="product-item-text">
             <h4 className="title-item">{titleItem}</h4>
             <span className="price">{titlePrice}</span>
           </div>
-        </a>
+        </Link>
       </div>
-    </div>
+   
   );
 };
 export default ProductItem;

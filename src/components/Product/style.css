@@ -1,11 +1,14 @@
 .product_main{
     display: flex;
-    gap: 1.875rem;
+    gap: 20px;
+    background: #fff;
+    justify-content: space-evenly;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 7px;
 }
 .img-product{
-    width: 100%;
+    width: 245.500px;
+    height: 245.500px;
 }
-.product-item{
-    flex: 1;
 
-}

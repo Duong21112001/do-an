@@ -1,0 +1,14 @@
+.show-header{
+    background: #fff;
+    display: flex;
+    padding: 20px 10px;
+    align-items: center;
+    color: #cf3364
+}
+select{
+    padding: 10px;
+    margin-left: 20px;
+    color: #cf3364;
+    border: 1px solid;
+    outline: none;
+}

@@ -1,16 +1,13 @@
 import React from "react";
-import ProductItem from "./components/ProductItem";
 import { v4 as uuidv4 } from "uuid";
-
 import "./style.css";
-import ProductList from "./components/ProductList";
+import ProductList from './ProductList'
 const Product = () => {
  const productType = [
     //map ra các loại mặt hàng
      {id:uuidv4(), title:"Hàng mới về"},
     {id:uuidv4(), title:"Thú nhồi bông"},
     {id:uuidv4(), title:"Gấu hoạt hình"},
-    {id:uuidv4(), title:"Gối bông"},
     {id:uuidv4(), title:"Gối bông"},
 
  ]
