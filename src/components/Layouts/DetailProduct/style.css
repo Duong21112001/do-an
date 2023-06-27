@@ -1,0 +1,23 @@
+.detail_product_content{
+    display: flex;
+   gap: 40px;
+}
+.detail_product_text{
+    display: flex;
+    flex-direction: column;
+}
+.btn{
+    color: #fff;
+    background-color:#cf3364 ;
+    padding: 20px;
+    margin-top: 40px;
+}
+.title-item.detail{
+    font-size: 1.5rem;
+}
+.img_detail{
+   max-width: 600px;
+    height: 600px;
+    object-fit: cover;
+    object-position: right top;
+}

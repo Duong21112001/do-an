@@ -1,0 +1,11 @@
+.product_main{
+    display: flex;
+    gap: 1.875rem;
+}
+.img-product{
+    width: 100%;
+}
+.product-item{
+    flex: 1;
+
+}

@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  /* padding: 0; */
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+li,
+ol {
+  list-style: none;
+}
+
+body {
+  font-family: 'Montserrat-Medium';
+  font-size: 14px;
+  background: #fff4f4;
+}
+
+.container {
+  min-width: 1200px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.btn {
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.title-product {
+  font-size: 2rem;
+}
+
+main {
+  background: #fff4f4;
+}
+
+.product-content {
+  text-align: center;
+  padding: 4rem;
+}
+
+.img-product {
+  border-radius: 20px;
+  box-shadow: 0 0.3125rem 0.625rem rgba(0, 0, 0, 0.2);
+}
+
+.product-item {
+  text-align: left;
+}
+
+.product-item-text {
+  margin-left: 20px;
+}
+
+.title-item {
+  font-size: 1.1rem;
+  padding: 1.5rem 0 1.5rem;
+  font-family: "Montserrat-Black";
+  color: #cf3364;
+  max-width: 80%;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-family: "Montserrat-Black";
+}
