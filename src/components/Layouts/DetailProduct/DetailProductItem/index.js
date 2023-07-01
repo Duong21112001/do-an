@@ -1,9 +1,9 @@
 import React from "react";
 import Comment from "../../Comment";
 
-const DetailProductItem = () => {
+const DetailProductItem = ({ img }) => {
   return (
-    <>
+    <React.Fragment>
       <div className="container">
         <div className="detail_product_item">
           <ul className="inf_product">
@@ -57,12 +57,12 @@ const DetailProductItem = () => {
         <div className="img-detail">
           <img
             className="img_detail_item"
-            src="https://teddy.vn/wp-content/uploads/2021/10/gau-teddy-angel-hong-2.jpg"
+            src={img}
           />
         </div>
-        <Comment/>
+        <Comment />
       </div>
-    </>
+    </React.Fragment>
   );
 };
 export default DetailProductItem;

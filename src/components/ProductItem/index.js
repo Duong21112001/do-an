@@ -1,21 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const ProductItem = (props) => {
   const {
-    dataProduct: { imgProduct, titleItem, titlePrice ,id},
+    dataProduct: { imgProduct, titleItem, titlePrice },
   } = props;
+  //  <Link  className="link-product-item" to={`/DetailProduct`}>  </Link>
+  const navigate = useNavigate()
   return (
-   
-      <div className="product-item">
-        <Link  className="link-product-item" to={`/DetailProduct/${id}`}>
-          <img className="img-product" src={imgProduct} alt="" />
-          <div className="product-item-text">
-            <h4 className="title-item">{titleItem}</h4>
-            <span className="price">{titlePrice}</span>
-          </div>
-        </Link>
+
+    <div className="product-item" onClick={() => navigate('/DetailProduct', { state: props.dataProduct })}>
+      <img className="img-product" src={imgProduct} alt="" />
+      <div className="product-item-text">
+        <h4 className="title-item">{titleItem}</h4>
+        <span className="price">{titlePrice}</span>
       </div>
-   
+    </div>
+
   );
 };
 export default ProductItem;

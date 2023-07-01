@@ -4,7 +4,8 @@ import Button from "../Button";
 import { Link } from "react-router-dom";
 import Login from "../Layouts/Login";
 import { useNavigate } from 'react-router-dom'
-
+import { v4 as uuidv4 } from "uuid";
+import { removeAscent } from "../../ulit";
 function Header() {
   var Nav = document.querySelector("nav")
   const [nav, newNav] = useState("")
@@ -15,9 +16,28 @@ function Header() {
   const [password, setPassword] = useState("")
   const [nameUser, setNameUser] = useState("")
   const [APILogin, setAPILogin] = useState([])
+  const [APIProduct, setAPIProduct] = useState([])
+  const [dataProduct, setDataProduct] = useState([])
+  const [search, setSearch] = useState("")
+
   const navigate = useNavigate()
+  const getDataProduct = () => {
+    fetch('https://649be5960480757192371734.mockapi.io/product', {
+      method: 'GET',
+      headers: { 'content-type': 'application/json' },
+    }).then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      // handle error
+    }).then(tasks => {
+      setAPIProduct(tasks)
+    }).catch(error => {
+      console.log("error", error);
+    })
+  }
   const getDataLogin = () => {
-    fetch('https://647c676fc0bae2880ad0a7a8.mockapi.io/login', {
+    fetch('https://649be5960480757192371734.mockapi.io/login', {
       method: 'GET',
       headers: { 'content-type': 'application/json' },
     }).then(res => {
@@ -38,17 +58,15 @@ function Header() {
     localStorage.setItem("name", name)
   }, [name])
   useEffect(() => {
+    getDataProduct()
     getDataLogin()
   }, [])
-  const handleSubmit = (phoneNumber, password) => {
+  const handleSubmit = () => {
     const data = APILogin
-    const checkPhoneNumber = data.some(item => item.sdt === phoneNumber)
+
+    const checkPhoneNumber = data.some(item => item.phoneNumber === phoneNumber)
     if (checkPhoneNumber) {
-
-
-      const getUser = data.find(item => item.sdt === phoneNumber)
-      console.log(getUser);
-
+      const getUser = data.find(item => item.phoneNumber === phoneNumber)
       if (getUser.password === password) {
         alert("Đăng nhập thành công")
         setActiveLogin(false)
@@ -79,16 +97,18 @@ function Header() {
   }
   const handleLogout = () => {
     setName("");
-    console.log("logout");
     localStorage.removeItem("name")
   }
-  const handleRegister = (nameUser, password, phoneNumber) => {
+  const handleRegister = () => {
+    console.log("đăng kí");
     const newTask = {
+      idLogin: uuidv4(),
       name: nameUser,
       password: password,
-      sdt: phoneNumber
+      phoneNumber: phoneNumber,
+
     };
-    fetch('https://647c676fc0bae2880ad0a7a8.mockapi.io/login', {
+    fetch('https://649be5960480757192371734.mockapi.io/login', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       // Send your data in the request body as JSON
@@ -103,17 +123,28 @@ function Header() {
       setNameUser("")
       setPassword("")
       setPhoneNumber("")
-      console.log(task);
       setAPILogin([...APILogin, task])
     }).catch(error => {
-      // handle error
+      console.log(error)
     })
-
-
   }
-  const changeNameUser =(e)=>{
+  const changeNameUser = (e) => {
     setNameUser(e.target.value)
   }
+  const handleSearch = (e) => {
+    setSearch(e.target.value.toLowerCase());
+  }
+  useEffect(() => {
+    getDataProduct();
+    setDataProduct(APIProduct.filter(item => {
+      const searchTerm = removeAscent(search).trim().toLowerCase();
+      const titleItem = removeAscent(item.titleItem).trim().toLowerCase();
+      return titleItem.includes(searchTerm);
+    }));
+  }, [search]);
+
+
+
   return (
     <header className="header">
       <div className="container">
@@ -132,16 +163,31 @@ function Header() {
                 <h2 className="title-page">Ôm là yêu</h2>
               </div>
             </Link>
-
+            {
+              // tìm kiếm sản phẩm
+            }
             <div className="search">
               <input
                 className="int"
+                value={search}
                 type="text"
                 placeholder="Nhập sản phẩm cần tìm"
+                onChange={handleSearch}
               />
               <i className="fa-solid fa-magnifying-glass"></i>
+              {search ?
+                <div className="list_search">
+                  <ul className="list_search-ul">
+                    {dataProduct.map(item =>
+                      <li key={item.idProduct} onClick={() => navigate("/DetailProduct", { state: item })} className="list_search-li">{item.titleItem}</li>
+                    )}
+                  </ul>
+                </div>
+                :
+                null
+              }
             </div>
-            <Link to={`cart`}>
+            <Link to='/cart' onClick={() => setActiveItem(0)}>
               <i className="fa-solid fa-cart-shopping"></i>
             </Link>
             <div className="get-ifo">
@@ -311,11 +357,11 @@ function Header() {
           phoneNumber={phoneNumber}
           nameUser={nameUser}
           password={password}
-          changePhoneNumber={(e)=> setPhoneNumber(e.target.value)  }
-          changeNameUser={(e)=> changeNameUser(e) }
-          changePassword={ (e)=>setPassword(e.target.value)}
-          handleRegister={() => handleRegister}
-          handleSubmit={() => handleSubmit()}
+          changePhoneNumber={(e) => setPhoneNumber(e.target.value)}
+          changeNameUser={(e) => changeNameUser(e)}
+          changePassword={(e) => setPassword(e.target.value)}
+          handleRegister={handleRegister}
+          handleSubmit={handleSubmit}
           onClick={(item) => handleActive(item)} />
         : null}
 

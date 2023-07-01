@@ -3,7 +3,8 @@ import './style.css'
 import Input from '../../Input'
 import Button from '../../Button'
 function Login(props) {
-  const { onClick,
+  const {
+    onClick,
     handleSubmit,
     handleRegister,
     phoneNumber,
@@ -11,10 +12,11 @@ function Login(props) {
     changeNameUser,
     password,
     nameUser,
-    changePassword } = props
+    changePassword
+  } = props
   const [isCheckLogin, setIsCheckLogin] = useState(true)
 
-  console.log(nameUser);
+
   return (
 
     <div className='login ' >
@@ -27,7 +29,7 @@ function Login(props) {
               <span className='des'>Đăng nhập hoặc tạo tài khoản</span>
               <Input onChange={changePhoneNumber} classInput='input_login' value={phoneNumber} placeholder='Số điện thoại' />
               <Input classInput='input_login' onChange={changePassword} placeholder='Mật khẩu' value={password} />
-              <Button addClass='btn-login' onClick={() => handleSubmit(phoneNumber, password)} title='Tiếp tục' />
+              <Button addClass='btn-login' onClick={handleSubmit} title='Tiếp tục' />
 
               <a className='link-email' href=''>Đăng nhập bằng Email</a>
               <div className='login-hr'>
@@ -49,7 +51,7 @@ function Login(props) {
                 <Input onChange={changeNameUser} classInput='input_login' value={nameUser} placeholder='Tên đăng nhập' />
                 <Input onChange={changePhoneNumber} classInput='input_login' value={phoneNumber} placeholder='Số điện thoại' />
                 <Input classInput='input_login' onChange={changePassword} placeholder='Mật khẩu' value={password} />
-                <Button addClass='btn-login' onClick={() => handleRegister(nameUser, password, phoneNumber)} title='Tiếp tục' />
+                <Button addClass='btn-login' onClick={handleRegister} title='Tiếp tục' />
 
                 <a className='link-email' href=''>Đăng nhập bằng Email</a>
                 <div className='login-hr'>

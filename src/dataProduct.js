@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-export  const dataProduct = [
+export const dataProduct = [
   {
     id: uuidv4(),
     imgProduct:
@@ -442,4 +442,5 @@ export  const dataProduct = [
     titlePrice: "290000",
   }
 ];
+
 

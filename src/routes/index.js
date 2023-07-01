@@ -8,43 +8,43 @@ import Login from "../components/Layouts/Login";
 
 const routePublic = [
     {
-        id:uuidv4(),
-        path:"/",
+        id: uuidv4(),
+        path: "/",
         component: Home
     },
     {
-        id:uuidv4(),
-        path:"/product",
+        id: uuidv4(),
+        path: "/product",
         component: Product
     },
     {
-        id:uuidv4(),
-        path:"/Cart",
+        id: uuidv4(),
+        path: "/Cart",
         component: Cart
     },
     {
-        id:uuidv4(),
-        path:"/DetailProduct/:id",
+        id: uuidv4(),
+        path: "/DetailProduct/",
         component: DetailProduct
     },
     {
-        id:uuidv4(),
-        path:"/ShowProduct/:name",
+        id: uuidv4(),
+        path: "/ShowProduct/:name",
         component: ShowProduct
     },
     {
-        id:uuidv4(),
-        path:"/ShowProduct/",
+        id: uuidv4(),
+        path: "/ShowProduct/",
         component: ShowProduct
     },
     {
-        id:uuidv4(),
-        path:"/Login",
+        id: uuidv4(),
+        path: "/Login",
         component: Login
     }
 
 ]
-const routePrivate=[
-    
+const routePrivate = [
+
 ]
-export {routePublic,routePrivate}
+export { routePublic, routePrivate }

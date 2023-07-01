@@ -3,15 +3,39 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import Product from './components/Product'
 // lấy ra tất cả sản phẩm
-import { dataProduct } from "../../../dataProduct.js";
 import _ from 'lodash';
 import { useParams } from 'react-router-dom';
 
 function ShowProduct() {
     const name = useParams()
+    const productType = name.name ? name.name : "show-all"
+
     // 1 state sản phẩm 
+    const [dataProduct, setDataProduct] = useState([])
     const [data, setData] = useState(dataProduct)
     const [value, setValue] = useState('newProduct')
+
+    const getDataProduct = async () => {
+        try {
+            const response = await fetch('https://649be5960480757192371734.mockapi.io/product', {
+                method: 'GET',
+                headers: { 'content-type': 'application/json' },
+            });
+
+            if (response.ok) {
+                const tasks = await response.json();
+                setDataProduct(tasks);
+            } else {
+                throw new Error('Network response was not OK.');
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+    useEffect(() => {
+        getDataProduct()
+    }, [])
 
     const myChange = e => {
         const selectedValue = e.target.value;
@@ -27,25 +51,24 @@ function ShowProduct() {
             setData(_.orderBy(data, ['titlePrice'], ['desc']));
         }
     }
-
     useEffect(() => {
-        if (name.name === "thu-nhoi-bong") {
+        if (productType === "thu-nhoi-bong") {
 
-            setData(dataProduct.filter(item => item.titleProduct === "Thú nhồi bông"))
+            setData(dataProduct.filter(item => item.titleProduct === "thú nhồi bông"))
         }
-        else if (name.name === "gau-hoat-hinh") {
-            setData(dataProduct.filter(item => item.titleProduct === "Gấu hoạt hình"))
+        else if (productType === "gau-hoat-hinh") {
+            setData(dataProduct.filter(item => item.titleProduct === "gấu hoạt hình"))
         }
-        else if (name.name === "goi-bong") {
-            setData(dataProduct.filter(item => item.titleProduct === "Gối bông"))
+        else if (productType === "goi-bong") {
+            setData(dataProduct.filter(item => item.titleProduct === "gối bông"))
         }
-        else if (name.name === "hang-moi-ve") {
-            setData(dataProduct.filter(item => item.titleProduct === "Hàng mới về"))
+        else if (productType === "hang-moi-ve") {
+            setData(dataProduct.filter(item => item.titleProduct === "hàng mới về"))
         }
         else {
             setData(dataProduct)
         }
-    }, [name.name])
+    }, [productType])
     return (
         <div>
             <div className='show-product'>
