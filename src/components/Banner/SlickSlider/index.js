@@ -22,12 +22,12 @@ const Slider = (props) => {
     <div className="slider">
     
         <div className="slier-content">
-          <button onClick={handleBack}>
+          <button className="click-slider click-left" onClick={handleBack}>
             <i className="fa-solid fa-angle-left"></i>
           </button>
 
           <img className="img-slider" src={listImg[currentIndex].src} alt="" />
-          <button onClick={handleNext}>
+          <button className="click-slider click-right" onClick={handleNext}>
             <i className="fa-solid fa-angle-right"></i>
           </button>
         </div>

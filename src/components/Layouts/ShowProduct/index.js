@@ -12,7 +12,9 @@ function ShowProduct() {
 
     // 1 state sản phẩm 
     const [dataProduct, setDataProduct] = useState([])
-    const [data, setData] = useState(dataProduct)
+   
+    const [data, setData] = useState([])
+    
     const [value, setValue] = useState('newProduct')
 
     const getDataProduct = async () => {
@@ -25,6 +27,8 @@ function ShowProduct() {
             if (response.ok) {
                 const tasks = await response.json();
                 setDataProduct(tasks);
+                setData(tasks)
+                
             } else {
                 throw new Error('Network response was not OK.');
             }
@@ -61,6 +65,7 @@ function ShowProduct() {
         }
         else if (productType === "goi-bong") {
             setData(dataProduct.filter(item => item.titleProduct === "gối bông"))
+            console.log("===",dataProduct.filter(item => item.titleProduct === "gối bông"))
         }
         else if (productType === "hang-moi-ve") {
             setData(dataProduct.filter(item => item.titleProduct === "hàng mới về"))

@@ -70,12 +70,14 @@
 }
 /* comment */
 .comment{
-    margin: 200px 0;
+    margin: 100px 0;
+    text-align: center;
 }
 .local-comment{
     display: flex;
     align-items: center;
     margin-top: 50px;
+    justify-content: center;
 }
 .local-ipn{
     width: 70%;

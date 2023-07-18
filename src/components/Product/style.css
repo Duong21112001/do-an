@@ -11,4 +11,20 @@
     width: 245.500px;
     height: 245.500px;
 }
+@media(max-width:1200px){
+    .product-content{
+        padding: 2rem;
+    }
+    .title-product{
+        margin: 3% auto;
+        font-size: 1.5rem;
+        padding: 1.5% 1%;
+    }
+    .comment{
+        margin: 100px 20px !important
+    }
+}
+@media(max-width:786px){
+
+}
 

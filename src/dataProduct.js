@@ -324,7 +324,7 @@ export const dataProduct = [
   {
     id: uuidv4(),
     imgProduct:
-      "https://teddy.vn/wp-content/uploads/2023/06/Gau-truc-ong-tre-3-500x500.jpg",
+      "	https://teddy.vn/wp-content/uploads/2023/04/set-bo-hoa-vai-gau-lotso-500x500.jpg",
     titleProduct: "Hàng mới về",
     titleItem: "Gấu Trúc Bông Ống Tre",
     titlePrice: "250000",

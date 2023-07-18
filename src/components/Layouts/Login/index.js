@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './style.css'
 import Input from '../../Input'
 import Button from '../../Button'
+import { Link } from "react-router-dom";
 function Login(props) {
   const {
     onClick,
@@ -28,10 +29,10 @@ function Login(props) {
               <h2 className='title-login'>Xin chào,</h2>
               <span className='des'>Đăng nhập hoặc tạo tài khoản</span>
               <Input onChange={changePhoneNumber} classInput='input_login' value={phoneNumber} placeholder='Số điện thoại' />
-              <Input classInput='input_login' onChange={changePassword} placeholder='Mật khẩu' value={password} />
+              <Input classInput='input_login' type='password' onChange={changePassword} placeholder='Mật khẩu' value={password} />
               <Button addClass='btn-login' onClick={handleSubmit} title='Tiếp tục' />
 
-              <a className='link-email' href=''>Đăng nhập bằng Email</a>
+              <Link className='link-email' to ="/">Bạn quên mật khẩu?</Link>
               <div className='login-hr'>
                 <hr className='hr-login' />
                 <span className='opacity-sp'>Hoặc tiếp tục bằng</span>
@@ -49,8 +50,9 @@ function Login(props) {
                 <h2 className='title-login'>Xin chào,</h2>
                 <span className='des'>Đăng nhập hoặc tạo tài khoản</span>
                 <Input onChange={changeNameUser} classInput='input_login' value={nameUser} placeholder='Tên đăng nhập' />
-                <Input onChange={changePhoneNumber} classInput='input_login' value={phoneNumber} placeholder='Số điện thoại' />
-                <Input classInput='input_login' onChange={changePassword} placeholder='Mật khẩu' value={password} />
+                <Input onChange={changePhoneNumber} type={Number} classInput='input_login' value={phoneNumber} placeholder='Số điện thoại' />
+                <Input classInput='input_login' type='password' onChange={changePassword} placeholder='Mật khẩu' value={password} />
+                {/* <Input classInput='input_login' type={password} onChange={changePassword2} placeholder='Nhập lại mật khẩuMật khẩu' value={password2} /> */}
                 <Button addClass='btn-login' onClick={handleRegister} title='Tiếp tục' />
 
                 <a className='link-email' href=''>Đăng nhập bằng Email</a>

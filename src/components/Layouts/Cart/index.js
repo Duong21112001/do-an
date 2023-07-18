@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Input from "../../Input";
 import './style.css';
 import CartHeader from './CartHeader';
+import Button from "../../Button";
 
 const Cart = () => {
   const storedCart = JSON.parse(localStorage.getItem("listCart")) || [];
@@ -28,7 +29,9 @@ const Cart = () => {
     setDataCart(updatedCart);
     localStorage.setItem("listCart", JSON.stringify(updatedCart));
   };
-
+  const handleBuy = ( ) =>{
+    alert('bạn đã dặt hàng thành công')
+  }
   const handleCheckboxChange = (itemId, isChecked) => {
     const updatedCart = dataCart.map(item => {
       if (item.id === itemId) {
@@ -77,11 +80,16 @@ const Cart = () => {
               ))}
             </div>
             <div className="total-price-cart">
-              <span>Tổng tiền giỏ hàng = {totalPriceCart}</span>
-            </div>
             {dataCart.some(item => item.isChecked) && (
-              <button onClick={handleDeleteSelected}>Xóa đã chọn</button>
+              <Button addClass='btn-delete' title='Xóa đã chọn' onClick={handleDeleteSelected}/>
             )}
+              <span className="span-total">Tổng tiền giỏ hàng = {totalPriceCart}</span>
+              <button className="btn-buy" onClick={handleBuy}>
+                Thanh toán
+              </button>
+             
+            </div>
+           
           </div>
         ) : (
           <div>Thêm sản phẩm vào giỏ hàng để mua hàng</div>
