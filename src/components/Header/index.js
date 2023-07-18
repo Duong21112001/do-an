@@ -61,9 +61,12 @@ function Header() {
     getDataProduct()
     getDataLogin()
   }, [])
+  const handleLogout = () => {
+    setName("");
+    localStorage.removeItem("name")
+  }
   const handleSubmit = () => {
     const data = APILogin
-
     const checkPhoneNumber = data.some(item => item.phoneNumber === phoneNumber)
     if (checkPhoneNumber) {
       const getUser = data.find(item => item.phoneNumber === phoneNumber)
@@ -95,10 +98,7 @@ function Header() {
   const handleHederActive = (id) => {
     setActiveItem(id)
   }
-  const handleLogout = () => {
-    setName("");
-    localStorage.removeItem("name")
-  }
+ 
   const handleRegister = () => {
     console.log("đăng kí");
     const newTask = {
@@ -214,7 +214,7 @@ function Header() {
               </li>
               <li className={`menu-item ${activeItem === 3 ? "activeClick" : ""} `}
                 onClick={() => handleHederActive(3)}>
-                <Link className="link-menu-item" to="/ShowProduct/thu-nhoi-bong">
+                <Link className="link-menu-item" to="ShowProduct/thu-nhoi-bong">
                   thú nhồi bông
                 </Link>
                 <i className="fa-solid fa-chevron-down"></i>
@@ -280,37 +280,37 @@ function Header() {
                 <i className="fa-solid fa-chevron-down"></i>
                 <ul className="menu-high">
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
                       losto
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
                       among us
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
                       hello kitty
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
                       báo hồng
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
                       stich
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/thu-nhoi-bong">
                       cậu bé bút chì
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/">
+                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
                       doraemon
                     </Link>
                   </li>
