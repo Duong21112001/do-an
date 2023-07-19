@@ -6,144 +6,172 @@ import Login from "../Layouts/Login";
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from "uuid";
 import { removeAscent } from "../../ulit";
-function Header() {
-  var Nav = document.querySelector("nav")
-  const [nav, newNav] = useState("")
-  const [activeLogin, setActiveLogin] = useState(false)
-  const [activeItem, setActiveItem] = useState(1)
-  const [name, setName] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const [password, setPassword] = useState("")
-  const [nameUser, setNameUser] = useState("")
-  const [APILogin, setAPILogin] = useState([])
-  const [APIProduct, setAPIProduct] = useState([])
-  const [dataProduct, setDataProduct] = useState([])
-  const [search, setSearch] = useState("")
 
-  const navigate = useNavigate()
-  const getDataProduct = () => {
-    fetch('https://649be5960480757192371734.mockapi.io/product', {
-      method: 'GET',
-      headers: { 'content-type': 'application/json' },
-    }).then(res => {
+const Header = () => {
+  const [nav, setNav] = useState("");
+  const [activeLogin, setActiveLogin] = useState(false);
+  const [activeItem, setActiveItem] = useState(1);
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [nameUser, setNameUser] = useState("");
+  const [APILogin, setAPILogin] = useState([]);
+  const [APIProduct, setAPIProduct] = useState([]);
+  const [dataProduct, setDataProduct] = useState([]);
+  const [search, setSearch] = useState("");
+  const [tokens, setTokens] = useState({});
+  const navigate = useNavigate();
+
+  const STORAGE_KEY_NAME = "name";
+  const STORAGE_KEY_TOKENS = "tokens";
+
+  const getDataProduct = async () => {
+    try {
+      const res = await fetch('https://649be5960480757192371734.mockapi.io/product', {
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+      });
       if (res.ok) {
-        return res.json();
+        const tasks = await res.json();
+        setAPIProduct(tasks);
+      } else {
+        throw new Error('Error fetching product data');
       }
-      // handle error
-    }).then(tasks => {
-      setAPIProduct(tasks)
-    }).catch(error => {
+    } catch (error) {
       console.log("error", error);
-    })
-  }
-  const getDataLogin = () => {
-    fetch('https://649be5960480757192371734.mockapi.io/login', {
-      method: 'GET',
-      headers: { 'content-type': 'application/json' },
-    }).then(res => {
+    }
+  };
+
+  const getDataLogin = async () => {
+    try {
+      const res = await fetch('https://649be5960480757192371734.mockapi.io/login', {
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+      });
       if (res.ok) {
-        return res.json();
+        const tasks = await res.json();
+        setAPILogin(tasks);
+      } else {
+        throw new Error('Error fetching login data');
       }
-      // handle error
-    }).then(tasks => {
-      setAPILogin(tasks)
-    }).catch(error => {
-      // handle error
-    })
-    setPhoneNumber("")
-    setNameUser("")
-    setPassword("")
-  }
+    } catch (error) {
+      console.log("error", error);
+    }
+    setPhoneNumber("");
+    setNameUser("");
+    setPassword("");
+  };
+
   useEffect(() => {
-    localStorage.setItem("name", name)
-  }, [name])
+    const storedName = JSON.parse(localStorage.getItem(STORAGE_KEY_NAME));
+    if (storedName) {
+      setName(storedName);
+    }
+    const storedTokens = JSON.parse(localStorage.getItem(STORAGE_KEY_TOKENS));
+    if (storedTokens) {
+      setTokens(storedTokens);
+    }
+  }, []);
+
   useEffect(() => {
-    getDataProduct()
-    getDataLogin()
-  }, [])
+    localStorage.setItem(STORAGE_KEY_NAME, JSON.stringify(name));
+    localStorage.setItem(STORAGE_KEY_TOKENS, JSON.stringify(tokens));
+  }, [name, tokens]);
+
+  useEffect(() => {
+    getDataProduct();
+    getDataLogin();
+  }, []);
+
   const handleLogout = () => {
     setName("");
-    localStorage.removeItem("name")
-  }
-  const handleSubmit = () => {
-    const data = APILogin
-    const checkPhoneNumber = data.some(item => item.phoneNumber === phoneNumber)
-    if (checkPhoneNumber) {
-      const getUser = data.find(item => item.phoneNumber === phoneNumber)
-      if (getUser.password === password) {
-        alert("Đăng nhập thành công")
-        setActiveLogin(false)
-        setName(getUser.name)
-        navigate("/")
+    setTokens({});
+    localStorage.removeItem(STORAGE_KEY_NAME);
+    localStorage.removeItem(STORAGE_KEY_TOKENS);
+  };
 
+  const handleSubmit = () => {
+    const data = APILogin;
+    const checkPhoneNumber = data.some(item => item.phoneNumber === phoneNumber);
+    if (checkPhoneNumber) {
+      const getUser = data.find(item => item.phoneNumber === phoneNumber);
+      if (getUser.password === password) {
+        alert("Đăng nhập thành công");
+        setActiveLogin(false);
+        setName(getUser.name);
+        setTokens(getUser);
+        navigate("/");
       } else {
-        alert("Sai mật khẩu")
+        alert("Sai mật khẩu");
       }
     } else {
-      alert("Số điện thoại không tồn tại")
+      alert("Số điện thoại không tồn tại");
     }
-  }
-  window.addEventListener("scroll", function () {
-    const valueScroll = window.scrollY
-    if (valueScroll > 100) {
-      newNav("nav-bar")
-    } else {
-      newNav("")
-    }
-  })
+  };
+
+  const handleScroll = () => {
+    const valueScroll = window.scrollY;
+    setNav(valueScroll > 100 ? "nav-bar" : "");
+  };
+
   const handleActive = (item) => {
-    setActiveLogin(item)
+    setActiveLogin(item);
+  };
 
-  }
-  const handleHederActive = (id) => {
-    setActiveItem(id)
-  }
- 
+  const handleHeaderActive = (id) => {
+    setActiveItem(id);
+  };
+
   const handleRegister = () => {
-    console.log("đăng kí");
     const newTask = {
-      idLogin: uuidv4(),
-      name: nameUser,
+      name_user: nameUser,
       password: password,
-      phoneNumber: phoneNumber,
-
+      phone_number: phoneNumber,
+      id_login: uuidv4(),
     };
     fetch('https://649be5960480757192371734.mockapi.io/login', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      // Send your data in the request body as JSON
       body: JSON.stringify(newTask)
     }).then(res => {
       if (res.ok) {
         return res.json();
+      } else {
+        throw new Error('Error registering user');
       }
-      // handle error
     }).then(task => {
-      alert("Đăng kí thành công")
-      setNameUser("")
-      setPassword("")
-      setPhoneNumber("")
-      setAPILogin([...APILogin, task])
+      alert("Đăng kí thành công");
+      setNameUser("");
+      setPassword("");
+      setPhoneNumber("");
+      setAPILogin([...APILogin, task]);
     }).catch(error => {
-      console.log(error)
-    })
-  }
-  const changeNameUser = (e) => {
-    setNameUser(e.target.value)
-  }
+      console.log(error);
+    });
+  };
+
+  const handleChangeNameUser = (e) => {
+    setNameUser(e.target.value);
+  };
+
   const handleSearch = (e) => {
     setSearch(e.target.value.toLowerCase());
-  }
+  };
+
   useEffect(() => {
-    getDataProduct();
     setDataProduct(APIProduct.filter(item => {
       const searchTerm = removeAscent(search).trim().toLowerCase();
       const titleItem = removeAscent(item.titleItem).trim().toLowerCase();
       return titleItem.includes(searchTerm);
     }));
-  }, [search]);
+  }, [search, APIProduct]);
 
-
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <header className="header">
@@ -160,22 +188,19 @@ function Header() {
                   src="https://teddy.vn/wp-content/uploads/2023/03/logo-add-01gg-e1680256236315.png"
                   alt=""
                 />
-                <h2 className="title-page">Ôm là yêu</h2>
+                <h2 className="title-page">Ôm là yêu</h2>
               </div>
             </Link>
-            {
-              // tìm kiếm sản phẩm
-            }
             <div className="search">
               <input
                 className="int"
                 value={search}
                 type="text"
-                placeholder="Nhập sản phẩm cần tìm"
+                placeholder="Nhập sản phẩm cần tìm"
                 onChange={handleSearch}
               />
               <i className="fa-solid fa-magnifying-glass"></i>
-              {search ?
+              {search && (
                 <div className="list_search">
                   <ul className="list_search-ul">
                     {dataProduct.map(item =>
@@ -183,190 +208,186 @@ function Header() {
                     )}
                   </ul>
                 </div>
-                :
-                null
-              }
+              )}
             </div>
             <Link to='/cart' onClick={() => setActiveItem(0)}>
               <i className="fa-solid fa-cart-shopping"></i>
             </Link>
             <div className="get-ifo">
               <span className="show-user">{name ? name : "Login để mua hàng"}</span>
-
-              {name ? <Button addClass="btn-header" onClick={handleLogout} title="Đăng xuất" /> : <Button title="Đăng nhập" addClass="btn-header" onClick={() => setActiveLogin(true)} />}
-
-
+              {name ? (
+                <Button addClass="btn-header" onClick={handleLogout} title="Đăng xuất" />
+              ) : (
+                <Button title="Đăng nhập" addClass="btn-header" onClick={() => setActiveLogin(true)} />
+              )}
             </div>
           </div>
           <nav className={nav}>
             <ul className="menu_list">
               <li className={`menu-item ${activeItem === 1 ? "activeClick" : ""} `}
-                onClick={() => handleHederActive(1)}>
+                onClick={() => handleHeaderActive(1)}>
                 <Link className="link-menu-item" to="/">
-                  Trang chủ
+                  Trang chủ
                 </Link>
               </li>
               <li className={`menu-item ${activeItem === 2 ? "activeClick" : ""} `}
-                onClick={() => handleHederActive(2)}>
+                onClick={() => handleHeaderActive(2)}>
                 <Link className="link-menu-item" to="/ShowProduct">
-                  Tất cả sản phẩm
+                  Tất cả sản phẩm
                 </Link>
               </li>
               <li className={`menu-item ${activeItem === 3 ? "activeClick" : ""} `}
-                onClick={() => handleHederActive(3)}>
-                <Link className="link-menu-item" to="ShowProduct/thu-nhoi-bong">
-                  thú nhồi bông
+                onClick={() => handleHeaderActive(3)}>
+                <Link className="link-menu-item" to={`/ShowProduct/${encodeURIComponent("thú nhồi bông")}`}>
+                  Thú nhồi bông
                 </Link>
                 <i className="fa-solid fa-chevron-down"></i>
                 <ul className="menu-high">
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      chó
+                      Chó
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      mèo
+                      Mèo
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      thỏ
+                      Thỏ
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      cá sấu
+                      Cá sấu
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      bò
+                      Bò
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      cừu
+                      Cừu
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      voi
+                      Voi
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      trà sữa
+                      Trà sữa
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      khủng long
+                      Khủng long
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      kì lân
+                      Kỳ lân
                     </Link>
                   </li>
                 </ul>
               </li>
-
               <li className={`menu-item ${activeItem === 4 ? "activeClick" : ""} `}
-                onClick={() => handleHederActive(4)}>
-                <Link className="link-menu-item" to="/ShowProduct/gau-hoat-hinh">
-                  gấu hoạt hình
+                onClick={() => handleHeaderActive(4)}>
+                <Link className="link-menu-item" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                  Gấu hoạt hình
                 </Link>
                 <i className="fa-solid fa-chevron-down"></i>
                 <ul className="menu-high">
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
-                      losto
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                      Losto
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
-                      among us
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                      Among Us
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
-                      hello kitty
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                      Hello Kitty
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
-                      báo hồng
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                      Báo hồng
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
-                      stich
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                      Stitch
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/thu-nhoi-bong">
-                      cậu bé bút chì
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("thú nhồi bông")}`}>
+                      Cậu bé bút chì
                     </Link>
                   </li>
                   <li className="list-menu-high">
-                    <Link className="link-menu-high" to="/ShowProduct/gau-hoat-hinh">
-                      doraemon
+                    <Link className="link-menu-high" to={`/ShowProduct/${encodeURIComponent("gấu hoạt hình")}`}>
+                      Doraemon
                     </Link>
                   </li>
                 </ul>
               </li>
-
               <li className={`menu-item ${activeItem === 5 ? "activeClick" : ""} `}
-                onClick={() => handleHederActive(5)}>
-                <Link className="link-menu-item" to="/ShowProduct/goi-bong">
-                  gối bông
+                onClick={() => handleHeaderActive(5)}>
+                <Link className="link-menu-item" to={`/ShowProduct/${encodeURIComponent("gối bông")}`}>
+                  Gối bông
                 </Link>
                 <i className="fa-solid fa-chevron-down"></i>
                 <ul className="menu-high">
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      gối ôm
+                      Gối ôm
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      gối cổ chữ u
+                      Gối cổ chữ U
                     </Link>
                   </li>
                   <li className="list-menu-high">
                     <Link className="link-menu-high" to="/">
-                      gối tựa lưng
+                      Gối tựa lưng
                     </Link>
                   </li>
                 </ul>
               </li>
-
               <li className={`menu-item ${activeItem === 6 ? "activeClick" : ""} `}
-                onClick={() => handleHederActive(6)}>
-                <Link className="link-menu-item" to="/ShowProduct/hang-moi-ve">
-                  hàng mới về
+                onClick={() => handleHeaderActive(6)}>
+                <Link className="link-menu-item" to={`/ShowProduct/${encodeURIComponent("hàng mới về")}`}>
+                  Hàng mới về
                 </Link>
               </li>
             </ul>
           </nav>
         </div>
       </div>
-      {activeLogin ?
+      {activeLogin && (
         <Login
           phoneNumber={phoneNumber}
           nameUser={nameUser}
           password={password}
           changePhoneNumber={(e) => setPhoneNumber(e.target.value)}
-          changeNameUser={(e) => changeNameUser(e)}
+          changeNameUser={(e) => handleChangeNameUser(e)}
           changePassword={(e) => setPassword(e.target.value)}
           handleRegister={handleRegister}
           handleSubmit={handleSubmit}
-          onClick={(item) => handleActive(item)} />
-        : null}
-
+          onClick={(item) => handleActive(item)}
+        />
+      )}
     </header>
   );
-}
+};
 
 export default Header;

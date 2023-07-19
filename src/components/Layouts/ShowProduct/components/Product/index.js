@@ -6,16 +6,16 @@ import ProductItem from "../../../../ProductItem";
 
 
 function Product(props) {
-const {dataProduct} = props
+  const { dataProduct } = props
 
   return (
-    <>
-      <div className="product_main flex-wrap">
+
+    <div className="product_main flex-wrap">
       {dataProduct.map((item) => {
-          return <ProductItem key={item.id} dataProduct={item} />;
-        })}
-      </div>
-    </>
+        return <ProductItem key={item.id} dataProduct={item} />;
+      })}
+    </div>
+
   );
 }
 

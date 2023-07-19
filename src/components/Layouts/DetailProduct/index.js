@@ -138,7 +138,6 @@ const DetailProduct = () => {
   }
   const handleActive = (item) => {
     setActiveLogin(item)
-
   }
   return (
     <React.Fragment>

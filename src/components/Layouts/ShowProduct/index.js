@@ -1,99 +1,82 @@
-import React, { useEffect, useState } from 'react'
-
-import './style.css'
-import Product from './components/Product'
-// lấy ra tất cả sản phẩm
-import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import './style.css';
+import Product from './components/Product';
 import { useParams } from 'react-router-dom';
 
 function ShowProduct() {
-    const name = useParams()
-    const productType = name.name ? name.name : "show-all"
+    const { name } = useParams();
+    const productType = name ? name : '';
 
-    // 1 state sản phẩm 
-    const [dataProduct, setDataProduct] = useState([])
-   
-    const [data, setData] = useState([])
-    
-    const [value, setValue] = useState('newProduct')
+    const [dataProduct, setDataProduct] = useState([]);
+    const [data, setData] = useState([]);
+    const [value, setValue] = useState('newProduct');
+    const [isLoading, setIsLoading] = useState(true);
 
     const getDataProduct = async () => {
         try {
-            const response = await fetch('https://649be5960480757192371734.mockapi.io/product', {
-                method: 'GET',
-                headers: { 'content-type': 'application/json' },
-            });
+            setIsLoading(true);
+            const response = await fetch(
+                `https://649be5960480757192371734.mockapi.io/product?titleProduct=${productType}`,
+                {
+                    method: 'GET',
+                    headers: { 'content-type': 'application/json' },
+                }
+            );
 
             if (response.ok) {
                 const tasks = await response.json();
                 setDataProduct(tasks);
-                setData(tasks)
-                
+                setData(tasks);
             } else {
                 throw new Error('Network response was not OK.');
             }
         } catch (error) {
             console.log('Error:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        getDataProduct()
-    }, [])
+        getDataProduct();
+    }, [productType]);
 
-    const myChange = e => {
+    const handleSortChange = (e) => {
         const selectedValue = e.target.value;
         setValue(selectedValue);
 
-        if (selectedValue === "1") {
+        if (selectedValue === '1') {
             setData(dataProduct);
+        } else if (selectedValue === '2') {
+            setData([...data].sort((a, b) => a.titlePrice - b.titlePrice));
+        } else if (selectedValue === '3') {
+            setData([...data].sort((a, b) => b.titlePrice - a.titlePrice));
         }
-        if (selectedValue === "2") {
-            setData(_.orderBy(data, ['titlePrice'], ['asc']));
-        }
-        if (selectedValue === "3") {
-            setData(_.orderBy(data, ['titlePrice'], ['desc']));
-        }
-    }
-    useEffect(() => {
-        if (productType === "thu-nhoi-bong") {
+    };
 
-            setData(dataProduct.filter(item => item.titleProduct === "thú nhồi bông"))
-        }
-        else if (productType === "gau-hoat-hinh") {
-            setData(dataProduct.filter(item => item.titleProduct === "gấu hoạt hình"))
-        }
-        else if (productType === "goi-bong") {
-            setData(dataProduct.filter(item => item.titleProduct === "gối bông"))
-            console.log("===",dataProduct.filter(item => item.titleProduct === "gối bông"))
-        }
-        else if (productType === "hang-moi-ve") {
-            setData(dataProduct.filter(item => item.titleProduct === "hàng mới về"))
-        }
-        else {
-            setData(dataProduct)
-        }
-    }, [productType])
     return (
         <div>
             <div className='show-product'>
                 <div className='container'>
                     <div className='show-content'>
                         <div className='show-header'>
-                            <span>Sắp xếp theo</span>
-                            <select value={value} onChange={(e) => myChange(e)}>
-                                <option value="1">Mới nhất</option>
-                                <option value="2">Giá từ thấp đến cao</option>
-                                <option value="3">Giá từ cao xuống thấp</option>
+                            <span>Sắp xếp theo</span>
+                            <select value={value} onChange={handleSortChange}>
+                                <option value='1'>Mới nhất</option>
+                                <option value='2'>Giá từ thấp đến cao</option>
+                                <option value='3'>Giá từ cao xuống thấp</option>
                             </select>
                         </div>
-                        {/* truyền tất cả sản phẩm vào trong product */}
-                        <Product dataProduct={data} />
+                        {isLoading ? (
+                            <div>Loading...</div>
+                        ) : (
+                            <Product dataProduct={data} />
+                        )}
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default ShowProduct
+export default ShowProduct;
