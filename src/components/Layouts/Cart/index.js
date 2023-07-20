@@ -62,7 +62,7 @@ const Cart = () => {
       phoneNumber: value.phoneNumber,
       address: value.address,
       idBuy: uuidv4(),
-      address: "address 1", // You can change this to get the address from the form input
+
       product: listCart,
       key: uuidv4(),
     };
