@@ -9,11 +9,12 @@ import { useNavigate } from "react-router-dom";
 const STORAGE_KEY = "listCart";
 
 const Cart = () => {
-  const [value, setValue] = useState({
+  const [values, setValue] = useState({
     username: "",
     address: "",
     phoneNumber: ""
   });
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,14 +32,14 @@ const Cart = () => {
   useEffect(() => {
     // Update the checked items state whenever dataCart changes
     const updatedCheckedItems = dataCart.reduce((checkedItems, item) => {
-      checkedItems[item.id] = item.isChecked;
+      checkedItems[item.idProduct] = item.isChecked;
       return checkedItems;
     }, {});
     setCheckedItems(updatedCheckedItems);
   }, [dataCart]);
 
   const totalPriceCart = dataCart.reduce((totalPrice, item) => {
-    if (checkedItems[item.id]) {
+    if (checkedItems[item.idProduct]) {
       return totalPrice + item.titlePrice * item.quantity;
     }
     return totalPrice;
@@ -58,15 +59,14 @@ const Cart = () => {
   const handleBuy = () => {
     const listCart = JSON.parse(localStorage.getItem(STORAGE_KEY));
     const newTask = {
-      name: value.username,
-      phoneNumber: value.phoneNumber,
-      address: value.address,
+      name: values.username,
+      phoneNumber: values.phoneNumber,
+      address: values.address,
       idBuy: uuidv4(),
 
       product: listCart,
       key: uuidv4(),
     };
-
     fetch('https://647c676fc0bae2880ad0a7a8.mockapi.io/databuy', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -89,21 +89,25 @@ const Cart = () => {
   };
 
   const handleCheckboxChange = (itemId, isChecked) => {
-    const updatedCart = dataCart.map(item => {
-      if (item.id === itemId) {
-        return { ...item, isChecked };
-      }
-      return item;
+    console.log(itemId);
+    console.log(isChecked);
+    setDataCart(prevDataCart => {
+      const updatedCart = prevDataCart.map(item => {
+        if (item.idProduct === itemId) {
+          return { ...item, isChecked };
+        }
+        return item;
+      });
+      return updatedCart;
     });
-    setDataCart(updatedCart);
   };
+
 
   const handleSelectAllChange = (isChecked) => {
     const updatedCart = dataCart.map(item => ({ ...item, isChecked }));
     setDataCart(updatedCart);
   };
 
-  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const handleCheckout = () => {
     setIsFormVisible(true);
@@ -111,12 +115,16 @@ const Cart = () => {
 
   const handleChangeValue = (e) => {
     const { name, value } = e.target;
+
     setValue({
-      ...value,
+      ...values,
       [name]: value
     });
   };
-
+  const VND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
   return (
     <div className="cart">
       {dataCart.length ? (
@@ -140,18 +148,19 @@ const Cart = () => {
             <div className="cart-product">
               {dataCart.map(item => (
                 <CartHeader
-                  key={item.id}
+                  key={item.idProduct}
                   setDataCart={setDataCart}
                   listCart={item}
-                  handleCheckboxChange={handleCheckboxChange}
+                  handleCheckboxChange={ handleCheckboxChange}
                 />
               ))}
+
             </div>
             <div className="total-price-cart">
               {dataCart.some(item => item.isChecked) && (
                 <Button addClass="btn-delete" title="Xóa đã chọn" onClick={handleDeleteSelected} />
               )}
-              <span className="span-total">Tổng tiền giỏ hàng = {totalPriceCart}</span>
+              <span className="span-total">Tổng tiền giỏ hàng = {VND.format(totalPriceCart)}</span>
               <button className="btn-buy" onClick={handleCheckout}>
                 Thanh toán
               </button>
@@ -162,15 +171,15 @@ const Cart = () => {
               <h2>Thông tin đặt hàng</h2>
               <div className="form-group">
                 <label>Họ tên</label>
-                <input onChange={handleChangeValue} name="username" value={value.username} type="text" placeholder="Nhập họ tên của bạn" />
+                <input onChange={handleChangeValue} name="username" value={values.username} type="text" placeholder="Nhập họ tên của bạn" />
               </div>
               <div className="form-group">
                 <label>Địa chỉ</label>
-                <input onChange={handleChangeValue} name="address" value={value.address} type="text" placeholder="Nhập địa chỉ của bạn" />
+                <input onChange={handleChangeValue} name="address" value={values.address} type="text" placeholder="Nhập địa chỉ của bạn" />
               </div>
               <div className="form-group">
                 <label>Số điện thoại</label>
-                <input onChange={handleChangeValue} name="phoneNumber" value={value.phoneNumber} type="tel" placeholder="Nhập số điện thoại của bạn" />
+                <input onChange={handleChangeValue} name="phoneNumber" value={values.phoneNumber} type="tel" placeholder="Nhập số điện thoại của bạn" />
               </div>
               <button onClick={handleBuy}>Xác nhận đơn hàng</button>
             </div>

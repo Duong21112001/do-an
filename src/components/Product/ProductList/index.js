@@ -6,7 +6,7 @@ function ProductList(props) {
   const [dataProduct, setDataProduct] = useState([])
   const { dataType: { title } } = props
   const getDataProduct = () => {
-    fetch('https://649be5960480757192371734.mockapi.io/product', {
+    fetch('https://64ba0cde79b7c9def6c18adb.mockapi.io/product', {
       method: 'GET',
       headers: { 'content-type': 'application/json' },
     }).then(res => {
@@ -24,10 +24,7 @@ function ProductList(props) {
     getDataProduct()
   }, [])
 
-  //   hàm để random ra 1 arr chứ 4 sản phẩm 
-  // Hàm có 2 tham số
-  // tham số 1 là mảng sản phầm
-  // tham số 2 là loại sản phẩm
+  //   hàm để random ra 1 arr chứa 4 sản phẩm 
   const randomProduct = (arr, titleProductType) => {
     // lọc ra các sản phẩm có loại phẩm = titleProductType
     const newDataP = arr.filter((item) =>
@@ -38,9 +35,10 @@ function ProductList(props) {
     // tạo ra 1 mảng có 4 sản phẩm ngẫu nhiên và retun ra mảng đó
     return newDataP.filter((item, i) => i < 4)
   };
+  console.log(title);
   return (
     <React.Fragment>
-      <Link className="link-title-product" to={`ShowProduct`}>
+      <Link className="link-title-product" to={`ShowProduct/${encodeURI(title)}`}>
         <h3 className="title-product">{title}</h3>
       </Link>
       <div className="product_main">

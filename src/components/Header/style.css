@@ -66,7 +66,7 @@
 .fa-magnifying-glass {
     color: #cf3364;
     font-size: 1.5rem;
-
+    cursor: pointer;
 }
 
 .btn-login {

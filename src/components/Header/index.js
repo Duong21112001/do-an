@@ -63,19 +63,19 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const storedName = JSON.parse(localStorage.getItem(STORAGE_KEY_NAME));
+    const storedName = localStorage.getItem(STORAGE_KEY_NAME)
     if (storedName) {
       setName(storedName);
     }
-    const storedTokens = JSON.parse(localStorage.getItem(STORAGE_KEY_TOKENS));
+    const storedTokens = localStorage.getItem(STORAGE_KEY_TOKENS)
     if (storedTokens) {
       setTokens(storedTokens);
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_NAME, JSON.stringify(name));
-    localStorage.setItem(STORAGE_KEY_TOKENS, JSON.stringify(tokens));
+    localStorage.setItem(STORAGE_KEY_NAME, name);
+    localStorage.setItem(STORAGE_KEY_TOKENS, tokens);
   }, [name, tokens]);
 
   useEffect(() => {
@@ -92,14 +92,15 @@ const Header = () => {
 
   const handleSubmit = () => {
     const data = APILogin;
-    const checkPhoneNumber = data.some(item => item.phoneNumber === phoneNumber);
+    const checkPhoneNumber = data.some(item => item.phone_number === phoneNumber);
     if (checkPhoneNumber) {
-      const getUser = data.find(item => item.phoneNumber === phoneNumber);
+      const getUser = data.find(item => item.phone_number === phoneNumber);
       if (getUser.password === password) {
         alert("Đăng nhập thành công");
         setActiveLogin(false);
-        setName(getUser.name);
-        setTokens(getUser);
+        console.log(getUser);
+        setName(getUser.name_user);
+        setTokens(getUser.id_login);
         navigate("/");
       } else {
         alert("Sai mật khẩu");
@@ -172,7 +173,16 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+  const handleSubmitSearch = () => {
+    const test = APIProduct.filter(item => {
+      const searchTerm = removeAscent(search).trim().toLowerCase();
+      const titleItem = removeAscent(item.titleItem).trim().toLowerCase();
+      return titleItem.includes(searchTerm);
+    })
+    console.log(test[0].titleProduct);
+    navigate(`/ShowProduct/`, { state: test })
+    setSearch("")
+  }
   return (
     <header className="header">
       <div className="container">
@@ -199,12 +209,15 @@ const Header = () => {
                 placeholder="Nhập sản phẩm cần tìm"
                 onChange={handleSearch}
               />
-              <i className="fa-solid fa-magnifying-glass"></i>
+              <span style={{ cursor: "pointer" }} onClick={handleSubmitSearch}><i className="fa-solid fa-magnifying-glass"></i></span>
               {search && (
                 <div className="list_search">
                   <ul className="list_search-ul">
                     {dataProduct.map(item =>
-                      <li key={item.idProduct} onClick={() => navigate("/DetailProduct", { state: item })} className="list_search-li">{item.titleItem}</li>
+                      <li key={item.idProduct} onClick={() => navigate("/DetailProduct", { state: item })} className="list_search-li">
+                        {item.titleItem}
+
+                      </li>
                     )}
                   </ul>
                 </div>

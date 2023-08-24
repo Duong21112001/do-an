@@ -17,6 +17,7 @@ const DetailProduct = () => {
 
   const localStorages = useLocation()
   const product = localStorages.state
+  console.log(localStorages);
   const [activeLogin, setActiveLogin] = useState(false)
   const navigate = useNavigate()
   const [name, setName] = useState('')
@@ -112,7 +113,7 @@ const DetailProduct = () => {
   const handleAddProductToCart = (product) => {
     console.log(product);
     // Check cart xem có tồn tài sản phẩm này hay chưa 
-    const CheckProduct = dataCart.find(item => item.id === product.id)
+    const CheckProduct = dataCart.find(item => item.idProduct === product.idProduct)
 
     if (CheckProduct) {
       // có rồi thì cộng số lượng trong cart với số lượng ngoài product
@@ -139,6 +140,10 @@ const DetailProduct = () => {
   const handleActive = (item) => {
     setActiveLogin(item)
   }
+  const VND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
   return (
     <React.Fragment>
       {
@@ -166,13 +171,14 @@ const DetailProduct = () => {
               />
               <div className="detail_product_text">
                 <h4 className="title-item detail">{product.titleItem}</h4>
-                <span className="price">{product.titlePrice}<span>đ</span></span>
+                <span className="price">{VND.format(product.titlePrice)}<span></span></span>
                 <div className="quantity">
                   <span className="quantity-text">Số lượng:</span>
                   <div className="add_number">
-                    <Button title="+" addClass="btn-click" onClick={() => handleSetNumberToCart("+")} />
-                    <Input classInput='value' value={counter} />
+                    
                     <Button title="-" addClass="btn-click" onClick={() => handleSetNumberToCart("-")} />
+                    <Input classInput='value' value={counter} />
+                    <Button title="+" addClass="btn-click btn-click-plus" onClick={() => handleSetNumberToCart("+")} />
                   </div>
                 </div>
                 <div className="btn_group">

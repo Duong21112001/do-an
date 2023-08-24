@@ -2,20 +2,22 @@ import React, { useState, useEffect } from "react";
 import Input from "../../../Input";
 import Button from "../../../Button";
 
-const CartHeader = (props) => {
+const CartHeader = ({ listCart, setDataCart, handleCheckboxChange }) => {
   const {
-    listCart: { id, imgProduct, quantity, titlePrice, titleItem },
-    setDataCart,
-    handleCheckboxChange,
-    value
-  } = props;
+    idProduct,
+    imgProduct,
+    quantity,
+    titlePrice,
+    titleItem,
+    isChecked
+  } = listCart;
 
   const [counter, setCounter] = useState(quantity);
   const totalPrice = titlePrice * counter;
 
   useEffect(() => {
     const updatedCart = JSON.parse(localStorage.getItem("listCart")).map(
-      (item) => (item.id === id ? { ...item, quantity: counter } : item)
+      (item) => (item.idProduct === idProduct ? { ...item, quantity: counter } : item)
     );
     localStorage.setItem("listCart", JSON.stringify(updatedCart));
     setDataCart(updatedCart);
@@ -23,7 +25,7 @@ const CartHeader = (props) => {
 
   const handleDeleteProductInCart = () => {
     const updatedCart = JSON.parse(localStorage.getItem("listCart")).filter(
-      (product) => product.id !== id
+      (product) => product.idProduct !== idProduct
     );
     localStorage.setItem("listCart", JSON.stringify(updatedCart));
     setDataCart(updatedCart);
@@ -37,12 +39,18 @@ const CartHeader = (props) => {
     setCounter((prevCounter) => prevCounter + 1);
   };
 
+  const VND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
   return (
     <div className="cart-item">
       <label className="pd-label">
         <Input
           type="checkbox"
-          onChange={(e) => handleCheckboxChange(id, e.target.checked)}
+          checked={isChecked}
+          onChange={() => handleCheckboxChange(idProduct, !isChecked)}
         />
         <img className="img-cart" src={imgProduct} alt="" />
         <span className="label">{titleItem}</span>
@@ -55,7 +63,7 @@ const CartHeader = (props) => {
         <Button title="+" addClass="btn-click" onClick={incrementCounter} />
       </div>
       <span>
-        {totalPrice} <span>đ</span>{" "}
+        {VND.format(totalPrice)} <span>đ</span>{" "}
       </span>
       <span className="remove">
         <span onClick={handleDeleteProductInCart}>
